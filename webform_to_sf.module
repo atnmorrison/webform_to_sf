@@ -1,0 +1,57 @@
+<?php
+
+
+function webform_to_sf_webform_submission_insert($node, $submission) {
+	
+	//save the form and attachments to salesforce, requires an appropriate webservice to be setup
+  	$attachment_map = array();
+  	$componentinfo = '';
+
+  	//service url 
+  	$url = 'https://uowtest-developer-edition.na40.force.com/services/apexrest/web2lead2/';
+  	$data = '';
+
+  	$payload = array();
+  	$payload['files'] = array();
+  	foreach ($node->webform['components'] as $component) {
+  		if ($submission->data[$component['cid']]) {
+	  		if($component['type'] == 'file'){
+
+	    		$attachment_map[$component['cid']] = $component;
+	    		$component_data = $submission->data[$component['cid']]; 	
+	    		$query = db_select('file_managed');
+	    		$query->fields('file_managed', array('filename', 'uri', 'filemime'));
+	    		$query->condition('fid', $submission->data[$component['cid']][0]);
+
+	    		$result = $query->execute()->fetchAssoc();    			
+	
+	    		$thefile = array(); 
+	    		$thefile['name'] = $result['filename'];
+	    		$thefile['mime'] = $result['filemime'];
+	    		$thefile['data'] = base64_encode(file_get_contents($result['uri']));
+
+	    		array_push($payload['files'], $thefile);
+	    	
+	    	} else {
+	    		$payload[$component['form_key']] = implode(';', $submission->data[$component['cid']]);
+	    	}
+    	}
+  	}
+
+  	$jsonEncoded = json_encode($payload);
+
+
+  	//throw new Exception($jsonEncoded);
+
+  	$ch = curl_init($url);
+	curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");                                                                     
+	curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonEncoded);                                                                  
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);                                                                      
+	curl_setopt($ch, CURLOPT_HTTPHEADER, array(                                                                          
+    	'Content-Type: application/json',                                                                                
+    	'Content-Length: ' . strlen($jsonEncoded))                                                                       
+	);
+
+	$result = curl_exec($ch);
+
+}

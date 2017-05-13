@@ -1,0 +1,3 @@
+name = Webform to SF
+description = module that submits a form into a salesforce object through a corresponding webservice, supports attachments
+core = 7.x
