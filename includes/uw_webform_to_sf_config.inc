@@ -24,7 +24,7 @@ function uw_webform_to_sf_config_form($form, &$form_state, $webform_node) {
   );
 
   $form['target'] = array(
-  	'#type' => 'textfield',
+    '#type' => 'textfield',
     '#title' => t('Target'),
     '#description' => t('The REST service to post to'),
     '#size' => 100,
