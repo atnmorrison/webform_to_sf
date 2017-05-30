@@ -34,9 +34,9 @@ function uw_webform_to_sf_webform_submission_insert($node, $submission) {
   $componentinfo = '';
 
   $config = db_select('webform_to_sf_config')
-  ->fields('webform_to_sf_config', array('target','sobject','enabled'))
-  ->condition('nid', $node->nid)
-  ->execute()->fetchAssoc();
+    ->fields('webform_to_sf_config', array('target','sobject','enabled'))
+    ->condition('nid', $node->nid)
+    ->execute()->fetchAssoc();
 
 
   if($config && $config['enabled']) {
