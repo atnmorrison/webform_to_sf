@@ -34,7 +34,7 @@ function uw_webform_to_sf_config_form($form, &$form_state, $webform_node) {
   );
 
   $form['sobject'] = array(
-  	'#type' => 'textfield',
+    '#type' => 'textfield',
     '#title' => t('SObject'),
     '#description' => t('The sobject to write to'),
     '#size' => 50,
