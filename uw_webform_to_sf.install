@@ -1,39 +1,46 @@
 <?php
 
+/**
+ * @file
+ *
+ * The install file for Webform to SF module, defines the table for storing config parameters
+ *
+ */ 
+
 function uw_webform_to_sf_schema() {
 
-	$schema = array(); 
-	$schema['webform_to_sf_config'] = array(
-		'description' => 'Holds configuration data for saving the form to salesforce',
-		'fields' => array(
-			'nid' => array(
-        		'description' => 'The node identifier of a webform.',
-        		'type' => 'int',
-        		'unsigned' => TRUE,
-        		'not null' => TRUE,
-        		'default' => 0,
-        	),
-        	'target' => array(
-        		'description' => 'The webservice target that will accept the json post request',
-        		'type' => 'text',
-        		'not null' => true,
-        	),
-        	'sobject' => array(
-        		'description' => 'The api name of the sObject to save to',
-        		'type' => 'text',
-        		'not null' => true,
-        	),
-        	'enabled' => array(
-        		'description' => 'Should we post to this target?',
-        		'type' => 'int',
-        		'size' => 'tiny',
-        		'not null' => TRUE,
-        		'default' => 1,
-      		),
-    	),
-    	'primary key' => array('nid')
-	);
+  $schema = array(); 
+  $schema['webform_to_sf_config'] = array(
+    'description' => 'Holds configuration data for saving the form to salesforce',
+    'fields' => array(
+      'nid' => array(
+        'description' => 'The node identifier of a webform.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'target' => array(
+        'description' => 'The webservice target that will accept the json post request',
+        'type' => 'text',
+        'not null' => TRUE,
+      ),
+      'sobject' => array(
+        'description' => 'The api name of the sObject to save to',
+        'type' => 'text',
+        'not null' => TRUE,
+      ),
+      'enabled' => array(
+        'description' => 'Should we post to this target?',
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 1,
+      ),
+    ),
+    'primary key' => array('nid')
+  );
 
-	return $schema;
-	
+  return $schema;
+
 }

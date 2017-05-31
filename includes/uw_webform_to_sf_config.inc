@@ -1,10 +1,15 @@
 <?php
+/**
+ * @file 
+ *
+ * The configuration form for setting the parameters for webform to sf
+ *
+ */
+
 function uw_webform_to_sf_config_form($form, &$form_state, $webform_node) {
-	
 
   $form['#node'] = $webform_node;
-  $form['#tree'] = false;
-
+  $form['#tree'] = FALSE;
   $form['nid'] = array(
     '#type' => 'value',
     '#value' => $webform_node->nid,
@@ -12,7 +17,7 @@ function uw_webform_to_sf_config_form($form, &$form_state, $webform_node) {
 
   //check for an existing record there can only be one per form 
   $config = db_select('webform_to_sf_config')
-    ->fields('webform_to_sf_config', array('target','sobject','enabled'))
+    ->fields('webform_to_sf_config', array('target', 'sobject', 'enabled'))
     ->condition('nid', $webform_node->nid)
     ->execute()->fetchAssoc();
 
@@ -63,15 +68,16 @@ function uw_webform_to_sf_config_form_submit($form, &$form_state) {
   $target['enabled'] = trim($form_state['values']['enabled']);
   
   $config = db_select('webform_to_sf_config')
-    ->fields('webform_to_sf_config', array('target','sobject','enabled'))
+    ->fields('webform_to_sf_config', array('target', 'sobject', 'enabled'))
     ->condition('nid', $target['nid'])
     ->execute()->fetchAssoc();
 
   $success = FALSE;
 
-  if($config) {
+  if ($config) {
     $success = drupal_write_record('webform_to_sf_config', $target, 'nid');
-  } else {
+  } 
+  else {
     $success = drupal_write_record('webform_to_sf_config', $target);
   }
 

@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * @file
+ * Webform to SF module
+ *
+ * The webfrom to sf module is based on webform remote post it works along the
+ * @link http://drupal.org/project/webform Webform @endlink module.
+ * 
+ */
+
 
 /**
  * Implements hook_menu().
@@ -28,18 +37,18 @@ function uw_webform_to_sf_menu() {
 }
 
 function uw_webform_to_sf_webform_submission_insert($node, $submission) {
-	
+
   //save the form and attachments to salesforce, requires an appropriate webservice to be setup
   $attachment_map = array();
   $componentinfo = '';
 
   $config = db_select('webform_to_sf_config')
-    ->fields('webform_to_sf_config', array('target','sobject','enabled'))
+    ->fields('webform_to_sf_config', array('target', 'sobject', 'enabled'))
     ->condition('nid', $node->nid)
     ->execute()->fetchAssoc();
 
 
-  if($config && $config['enabled']) {
+  if ($config && $config['enabled']) {
     //service url 
     $url = $config['target'];
     $data = '';
@@ -47,41 +56,42 @@ function uw_webform_to_sf_webform_submission_insert($node, $submission) {
     $payload = array();
     $payload['targetobject'] = $config['sobject'];
     $payload['files'] = array();
-    	
+
     foreach ($node->webform['components'] as $component) {
-      if(isset($submission->data[$component['cid']])) {
-        if($component['type'] == 'file'){
-          if(isset($submission->data[$component['cid']][0])){
+      if (isset($submission->data[$component['cid']])) {
+        if ($component['type'] == 'file') {
+          if (isset($submission->data[$component['cid']][0])) {
             $attachment_map[$component['cid']] = $component;
-            $component_data = $submission->data[$component['cid']]; 	
+            $component_data = $submission->data[$component['cid']];
             $query = db_select('file_managed');
             $query->fields('file_managed', array('filename', 'uri', 'filemime'));
             $query->condition('fid', $submission->data[$component['cid']][0]);
 
-            $result = $query->execute()->fetchAssoc();    			
-    	
+            $result = $query->execute()->fetchAssoc();
+
             $thefile = array(); 
             $thefile['name'] = $result['filename'];
             $thefile['mime'] = $result['filemime'];
             $thefile['data'] = base64_encode(file_get_contents($result['uri']));
             array_push($payload['files'], $thefile);
-           }
-        } else {
+          }
+        } 
+        else {
           $payload[$component['form_key']] = implode(';', $submission->data[$component['cid']]);
         }
       }
     }
 
-    $jsonEncoded = json_encode($payload);
+    $json_encoded = json_encode($payload);
 
     $ch = curl_init($url);
     curl_setopt($ch, CURLOPT_SSLVERSION, 6);
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");                                                                     
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonEncoded);                                                                  
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);                                                                      
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $json_encoded);                                                                  
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);                                                                      
     curl_setopt($ch, CURLOPT_HTTPHEADER, array(                                                                          
       'Content-Type: application/json',                                                                                
-      'Content-Length: ' . strlen($jsonEncoded))                                                                       
+      'Content-Length: ' . strlen($json_encoded))                                                                       
     );
 
     $result = curl_exec($ch);
