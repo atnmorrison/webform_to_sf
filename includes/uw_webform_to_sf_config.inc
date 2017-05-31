@@ -41,7 +41,7 @@ function uw_webform_to_sf_config_form($form, &$form_state, $webform_node) {
   $form['sobject'] = array(
     '#type' => 'textfield',
     '#title' => t('SObject'),
-    '#description' => t('The sobject to write to'),
+    '#description' => t('The SObject to write to'),
     '#size' => 50,
     '#maxlength' => 50,
     '#required' => TRUE,
@@ -83,7 +83,7 @@ function uw_webform_to_sf_config_form_submit($form, &$form_state) {
 
   // Write a log if we weren't able to save the target successfully.
   if ($success === FALSE) {
-    watchdog('webform_to_sf', 'There was an error writing sf to salesforce config.', array(), WATCHDOG_ERROR);
+    watchdog('webform_to_sf', 'There was an error writing Webform to Salesforce config.', array(), WATCHDOG_ERROR);
   }
 
   $form_state['redirect'] = 'node/' . $form['#node']->nid . '/webform/sfconfig';
