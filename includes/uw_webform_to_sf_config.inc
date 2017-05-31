@@ -58,7 +58,6 @@ function uw_webform_to_sf_config_form($form, &$form_state, $webform_node) {
 
 }
 
-
 function uw_webform_to_sf_config_form_submit($form, &$form_state) {
 
   $target = array();
@@ -83,12 +82,26 @@ function uw_webform_to_sf_config_form_submit($form, &$form_state) {
 
   // Write a log if we weren't able to save the target successfully.
   if ($success === FALSE) {
-    watchdog('webform_to_sf', 'There was an error writing Webform to Salesforce config.', array(), WATCHDOG_ERROR);
+    watchdog('uw_webform_to_sf', 'There was an error writing Webform to Salesforce config.', array(), WATCHDOG_ERROR);
   }
 
   $form_state['redirect'] = 'node/' . $form['#node']->nid . '/webform/sfconfig';
 
 }
+
+function uw_webform_to_sf_config_form_validate($form, &$form_state) {
+  if (isset($form_state['values']['target']) && !valid_url($form_state['values']['target'], TRUE)) {
+    form_set_error('target', t('A valid URL must be entered as a target'));
+  }
+
+  if (!preg_match('/^[a-z_0-9]+$/i', $form_state['values']['sobject'])) {
+    form_set_error('sobject', t('Only alpha numeric characters and _ can be used in SObject names'));
+  }
+
+}
+
+
+
 
 
 

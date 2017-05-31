@@ -37,7 +37,7 @@ function uw_webform_to_sf_menu() {
 /**
  * Implements hook_perm().
  */
-function webform_remote_post_permission() {
+function uw_webform_to_sf_permission() {
   return array(
     'admin webform to sf' => array(
       'title' => t('Admin webform to sf'),
@@ -106,7 +106,7 @@ function uw_webform_to_sf_webform_submission_insert($node, $submission) {
 
     $result = curl_exec($ch);
     if ($success === FALSE) {
-      watchdog('webform_to_sf', 'Webfrom to SF post to salesforce failed with error: ' . curl_error($ch), array(), WATCHDOG_ERROR);
+      watchdog('uw_webform_to_sf', 'Webfrom to SF post to salesforce failed with error: ' . curl_error($ch), array(), WATCHDOG_ERROR);
     }
 
   }
