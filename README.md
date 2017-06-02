@@ -9,7 +9,7 @@ Production:
 https://login.salesforce.com/packaging/installPackage.apexp?p0=04t6A000000OVKw
 
 Sandbox:
-https:/test.salesforce.com/packaging/installPackage.apexp?p0=04t6A000000OVKw
+https://test.salesforce.com/packaging/installPackage.apexp?p0=04t6A000000OVKw
 
 ## Installation 
 
