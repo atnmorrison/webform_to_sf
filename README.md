@@ -15,6 +15,9 @@ https:/test.salesforce.com/packaging/installPackage.apexp?p0=04t6A000000OVKw
 
 Install the module in the appropriate module folder for your site or include it in your make file 
 
+## Contributors
+
+Scott Morrison
 
 ## Usage
 
