@@ -1,0 +1,9 @@
+name = uw webform to sf feature
+description = Adds the ability to send webform data to salesforce
+core = 7.x
+package = uWaterloo Engineering
+version = 7.x-1.0
+dependencies[] = features
+dependencies[] = uw_webform_to_sf
+features[features_api][] = api:2
+features[user_permission][] = admin webform to sf
